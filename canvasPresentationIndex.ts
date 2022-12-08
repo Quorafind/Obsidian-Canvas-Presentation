@@ -192,7 +192,6 @@ export default class CanvasPresentation extends Plugin {
 						else this.currentSlideNum = this.currentSlideNum - 1;
 					}
 
-					// This command will only show up in Command Palette when the check function returns true
 					return true;
 				}
 			}
@@ -200,6 +199,6 @@ export default class CanvasPresentation extends Plugin {
 	}
 
 	onunload() {
-
+		// Remove all slide note?
 	}
 }
