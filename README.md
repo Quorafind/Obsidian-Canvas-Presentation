@@ -2,6 +2,8 @@
 
 A plugin to help you display cards based on sequence.
 
+![](https://raw.githubusercontent.com/Quorafind/obsidian-canvas-presentation/master/PPT.gif)
+
 # How to use
 
 - Select any node and then trigger mark, a slide note that save slide content will be created.
