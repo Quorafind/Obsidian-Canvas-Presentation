@@ -178,7 +178,10 @@ export default class CanvasPresentation extends Plugin {
 						this.currentSlide.shift();
 
 						canvas.deselectAll();
-						const slideNodes = this.currentSlide[this.direction === "previous" ? this.currentSlideNum - 1 < 0 ? this.currentSlide.length - 1 : this.currentSlideNum - 1 : this.currentSlideNum - 2 < 0 ? this.currentSlide.length - 1 : this.currentSlideNum - 2]?.slice(2).split(', ');
+
+						let currentSlideNum = this.currentSlideNum === 0 ? this.currentSlide.length - 1 : this.currentSlideNum - 1;
+						if(this.currentSlideNum === this.currentSlide.length && this.direction !== "previous") currentSlideNum = this.currentSlide.length - 2;
+						const slideNodes = this.currentSlide[currentSlideNum]?.slice(2).split(', ');
 
 						slideNodes.forEach((id) => {
 							const node = canvas.nodes.get(id);
