@@ -6,7 +6,96 @@ export default class CanvasPresentation extends Plugin {
 	private currentSlideNum: number = 0;
 	private direction: string = "next";
 
+	private selectedNodeSet = new Set();
+
 	async onload() {
+		this.addCommand({
+		    id: 'next-group-in-viewport',
+		    name: 'Next Group In ViewPort',
+		    checkCallback: (checking: boolean) => {
+		        // Conditions to check
+				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
+		        if (canvasView?.getViewType() === 'canvas') {
+		            // If checking is true, we're simply "checking" if the command can be run.
+		            // If checking is false, then we want to actually perform the operation.
+		            if (!checking) {
+						const canvas = canvasView.canvas;
+		                const groups = this.getAllGroupNodeInViewPort(canvasView);
+
+						if(canvas.selection.size === 0) {
+							canvas.deselectAll();
+							canvas.select(groups[0]);
+							canvas.zoomToSelection();
+							return;
+						}
+
+						const selectedNode = canvas.selection.entries().next().value[1];
+						const restGroups = groups.filter((group)=> {
+							return group.x >= selectedNode.x && group.id !== selectedNode.id
+						});
+
+						if(restGroups.length === 0)  {
+							canvas.deselectAll();
+							canvas.select(groups[0]);
+							canvas.zoomToSelection();
+							return;
+						}
+
+						canvas.deselectAll();
+						canvas.select(restGroups[0]);
+						canvas.zoomToSelection();
+						return;
+		            }
+
+		            // This command will only show up in Command Palette when the check function returns true
+		            return true;
+		        }
+		    }
+		});
+
+		this.addCommand({
+			id: 'previous-group-in-viewport',
+			name: 'Previous Group In ViewPort',
+			checkCallback: (checking: boolean) => {
+				// Conditions to check
+				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
+				if (canvasView?.getViewType() === 'canvas') {
+					// If checking is true, we're simply "checking" if the command can be run.
+					// If checking is false, then we want to actually perform the operation.
+					if (!checking) {
+						const canvas = canvasView.canvas;
+						const groups = this.getAllGroupNodeInViewPort(canvasView);
+
+						if(canvas.selection.size === 0) {
+							canvas.deselectAll();
+							canvas.select(groups[groups.length - 1]);
+							canvas.zoomToSelection();
+							return;
+						}
+
+						const selectedNode = canvas.selection.entries().next().value[1];
+						const restGroups = groups.filter((group)=> {
+							return group.x <= selectedNode.x && group.id !== selectedNode.id
+						});
+
+						if(restGroups.length === 0)  {
+							canvas.deselectAll();
+							canvas.select(groups[groups.length - 1]);
+							canvas.zoomToSelection();
+							return;
+						}
+
+						canvas.deselectAll();
+						canvas.select(restGroups[restGroups.length - 1]);
+						canvas.zoomToSelection();
+						return;
+					}
+
+					// This command will only show up in Command Palette when the check function returns true
+					return true;
+				}
+			}
+		});
 
 		this.addCommand({
 			id: 'mark-slide-number',
@@ -199,6 +288,34 @@ export default class CanvasPresentation extends Plugin {
 				}
 			}
 		});
+	}
+
+	getAllGroupNode(canvasView: any) {
+		const canvas = canvasView.canvas;
+		const groups = Array.from(canvas.nodes);
+		const groupsArray: any[] = [];
+		groups.forEach((group)=>{
+			if(group[1]?.renderedZIndex === -1) groupsArray.push(group[1]);
+		})
+		groupsArray.sort((a, b) => a.x - b.x);
+
+		return groupsArray;
+	}
+
+	getAllGroupNodeInViewPort(canvasView: any) {
+		const canvas = canvasView.canvas;
+		const groups = canvas.getViewportNodes();
+		const groupsArray: any[] = [];
+
+		groups.forEach((group)=>{
+			if(group?.renderedZIndex === -1) groupsArray.push(group);
+		})
+
+		console.log(groupsArray);
+
+		groupsArray.sort((a, b) => a.x - b.x);
+
+		return groupsArray;
 	}
 
 	onunload() {
