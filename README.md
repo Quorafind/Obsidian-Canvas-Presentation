@@ -6,7 +6,12 @@ A plugin to help you display cards based on sequence.
 
 # How to use
 
-- Select any node and then trigger mark, a slide note that save slide content will be created.
+## Creating the Slideshow
+- In canvas, **select the card** that you want to be your first slide and trigger  `Canvas Presentation: Mark Slide Number` from the Command palette
+	- a new card will be created on your canvas that holds the IDs of the cards you added
+- **In order**, continue to add cards with `Canvas Presentation: Mark Slide Number` one by one
+
+## Running the Presentation
 - Use `Next Slide` Or `Previous slide` to see the next or previous slide.
 
 Don't support link label yet.
