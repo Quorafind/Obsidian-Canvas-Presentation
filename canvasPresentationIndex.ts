@@ -1,4 +1,24 @@
-import { ItemView, Notice, Plugin } from 'obsidian';
+import { ItemView, Notice, Plugin, requireApiVersion } from 'obsidian';
+
+interface createdNode {
+    focus: boolean,
+    save: boolean,
+    pos: {
+        height: number;
+        width: number;
+        x: number;
+        y: number;
+    },
+    size: {
+        height: number;
+        width: number;
+        x: number;
+        y: number;
+    },
+    text: string,
+    position: 'center' | 'left' | 'right' | 'bottom' | 'top' | undefined
+}
+
 
 export default class CanvasPresentation extends Plugin {
 	private currentView: ItemView;
@@ -133,7 +153,26 @@ export default class CanvasPresentation extends Plugin {
 
 						if (!node) {
 							let selectionArray = Array.from(canvas.selection);
-							node = canvas.createTextNode({x: -200, y: -200}, {height: 200, width: 200}, true);
+							if(!requireApiVersion("1.1.10")) node = canvas.createTextNode({x: -200, y: -200}, {height: 200, width: 200}, true);
+							else {
+								node = canvas.createTextNode({
+									pos: {
+										x: -200,
+										y: -200,
+										height: 200,
+										width: 200
+									},
+									text: "",
+									focus: false,
+									save: true,
+									size: {
+										height: 200,
+										width: 200,
+										x: -200,
+										y: -200
+									}
+								});
+							}
 							canvas.deselectAll();
 
 							selectionArray.forEach((item: any) => {
