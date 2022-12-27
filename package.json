@@ -1,6 +1,6 @@
 {
 	"name": "canvas-presentation",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "A plugin to help you display cards based on sequence.",
 	"main": "main.js",
 	"scripts": {

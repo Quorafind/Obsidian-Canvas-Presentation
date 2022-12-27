@@ -1,25 +1,5 @@
 import { ItemView, Notice, Plugin, requireApiVersion } from 'obsidian';
 
-interface createdNode {
-    focus: boolean,
-    save: boolean,
-    pos: {
-        height: number;
-        width: number;
-        x: number;
-        y: number;
-    },
-    size: {
-        height: number;
-        width: number;
-        x: number;
-        y: number;
-    },
-    text: string,
-    position: 'center' | 'left' | 'right' | 'bottom' | 'top' | undefined
-}
-
-
 export default class CanvasPresentation extends Plugin {
 	private currentView: ItemView;
 	private currentSlide: string[] = [];
@@ -39,6 +19,7 @@ export default class CanvasPresentation extends Plugin {
 		            // If checking is true, we're simply "checking" if the command can be run.
 		            // If checking is false, then we want to actually perform the operation.
 		            if (!checking) {
+						// @ts-ignore
 						const canvas = canvasView.canvas;
 		                const groups = this.getAllGroupNodeInViewPort(canvasView);
 
@@ -83,6 +64,7 @@ export default class CanvasPresentation extends Plugin {
 					// If checking is true, we're simply "checking" if the command can be run.
 					// If checking is false, then we want to actually perform the operation.
 					if (!checking) {
+						// @ts-ignore
 						const canvas = canvasView.canvas;
 						const groups = this.getAllGroupNodeInViewPort(canvasView);
 
@@ -334,6 +316,7 @@ export default class CanvasPresentation extends Plugin {
 		const groups = Array.from(canvas.nodes);
 		const groupsArray: any[] = [];
 		groups.forEach((group)=>{
+			// @ts-ignore
 			if(group[1]?.renderedZIndex === -1) groupsArray.push(group[1]);
 		})
 		groupsArray.sort((a, b) => a.x - b.x);
@@ -346,6 +329,7 @@ export default class CanvasPresentation extends Plugin {
 		const groups = canvas.getViewportNodes();
 		const groupsArray: any[] = [];
 
+		// @ts-ignore
 		groups.forEach((group)=>{
 			if(group?.renderedZIndex === -1) groupsArray.push(group);
 		})
