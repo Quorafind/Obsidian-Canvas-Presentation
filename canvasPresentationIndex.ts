@@ -235,15 +235,17 @@ export default class CanvasPresentation extends Plugin {
 
 						const slideNodes = this.currentSlide[this.direction === "next" ? this.currentSlideNum : this.currentSlideNum + 1 === this.currentSlide.length ? 0 : this.currentSlideNum + 1]?.slice(2).split(', ');
 
-						slideNodes.forEach((id) => {
-							const node = canvas.nodes.get(id);
-							if(node) canvas.select(node);
-						});
+						setTimeout(()=>{
+							slideNodes?.forEach((id) => {
+								const node = canvas.nodes.get(id);
+								if(node) canvas.select(node);
+							});
 
-						this.direction = "next";
-						canvas.zoomToSelection();
+							this.direction = "next";
+							canvas.zoomToSelection();
 
-						if(!(this.currentSlideNum === 0 && this.currentSlide.length === 1)) this.currentSlideNum = this.currentSlideNum + 1;
+							if(!(this.currentSlideNum === 0 && this.currentSlide.length === 1)) this.currentSlideNum = this.currentSlideNum + 1;
+						}, 10);
 					}
 
 					// This command will only show up in Command Palette when the check function returns true
@@ -293,16 +295,18 @@ export default class CanvasPresentation extends Plugin {
 						if(this.currentSlideNum === this.currentSlide.length && this.direction !== "previous") currentSlideNum = this.currentSlide.length - 2;
 						const slideNodes = this.currentSlide[currentSlideNum]?.slice(2).split(', ');
 
-						slideNodes.forEach((id) => {
-							const node = canvas.nodes.get(id);
-							if(node) canvas.select(node);
-						});
+						setTimeout(()=>{
+							slideNodes.forEach((id) => {
+								const node = canvas.nodes.get(id);
+								if(node) canvas.select(node);
+							});
 
-						this.direction = "previous";
-						canvas.zoomToSelection();
+							this.direction = "previous";
+							canvas.zoomToSelection();
 
-						if(this.currentSlideNum === 0) this.currentSlideNum = this.currentSlide.length - 1;
-						else this.currentSlideNum = this.currentSlideNum - 1;
+							if(this.currentSlideNum === 0) this.currentSlideNum = this.currentSlide.length - 1;
+							else this.currentSlideNum = this.currentSlideNum - 1;
+						}, 10);
 					}
 
 					return true;
