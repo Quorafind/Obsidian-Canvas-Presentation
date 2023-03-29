@@ -1,7 +1,7 @@
 {
 	"id": "canvas-presentation",
 	"name": "Canvas Presentation",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"minAppVersion": "1.1.0",
 	"description": "A plugin to help you display cards based on sequence.",
 	"author": "Boninall",

@@ -1,4 +1,4 @@
-import { ItemView, Notice, Plugin } from 'obsidian';
+import { ItemView, Notice, Plugin, requireApiVersion } from 'obsidian';
 
 export default class CanvasPresentation extends Plugin {
 	private currentView: ItemView;
@@ -19,6 +19,7 @@ export default class CanvasPresentation extends Plugin {
 		            // If checking is true, we're simply "checking" if the command can be run.
 		            // If checking is false, then we want to actually perform the operation.
 		            if (!checking) {
+						// @ts-ignore
 						const canvas = canvasView.canvas;
 		                const groups = this.getAllGroupNodeInViewPort(canvasView);
 
@@ -63,6 +64,7 @@ export default class CanvasPresentation extends Plugin {
 					// If checking is true, we're simply "checking" if the command can be run.
 					// If checking is false, then we want to actually perform the operation.
 					if (!checking) {
+						// @ts-ignore
 						const canvas = canvasView.canvas;
 						const groups = this.getAllGroupNodeInViewPort(canvasView);
 
@@ -133,7 +135,26 @@ export default class CanvasPresentation extends Plugin {
 
 						if (!node) {
 							let selectionArray = Array.from(canvas.selection);
-							node = canvas.createTextNode({x: -200, y: -200}, {height: 200, width: 200}, true);
+							if(!requireApiVersion("1.1.10")) node = canvas.createTextNode({x: -200, y: -200}, {height: 200, width: 200}, true);
+							else {
+								node = canvas.createTextNode({
+									pos: {
+										x: -200,
+										y: -200,
+										height: 200,
+										width: 200
+									},
+									text: "",
+									focus: false,
+									save: true,
+									size: {
+										height: 200,
+										width: 200,
+										x: -200,
+										y: -200
+									}
+								});
+							}
 							canvas.deselectAll();
 
 							selectionArray.forEach((item: any) => {
@@ -295,6 +316,7 @@ export default class CanvasPresentation extends Plugin {
 		const groups = Array.from(canvas.nodes);
 		const groupsArray: any[] = [];
 		groups.forEach((group)=>{
+			// @ts-ignore
 			if(group[1]?.renderedZIndex === -1) groupsArray.push(group[1]);
 		})
 		groupsArray.sort((a, b) => a.x - b.x);
@@ -307,6 +329,7 @@ export default class CanvasPresentation extends Plugin {
 		const groups = canvas.getViewportNodes();
 		const groupsArray: any[] = [];
 
+		// @ts-ignore
 		groups.forEach((group)=>{
 			if(group?.renderedZIndex === -1) groupsArray.push(group);
 		})
